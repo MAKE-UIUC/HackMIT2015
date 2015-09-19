@@ -1,0 +1,5 @@
+*.pyc
+backend/venv
+.Spotlight
+.DS_Store
+thumbs.db
