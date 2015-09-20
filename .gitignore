@@ -3,3 +3,10 @@ backend/venv
 .Spotlight
 .DS_Store
 thumbs.db
+*.3dsx
+*.3ds
+*.elf
+*.bin
+*.smdh
+build
+.idea
