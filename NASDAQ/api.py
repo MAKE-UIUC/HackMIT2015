@@ -39,13 +39,14 @@ def extractArticleText(symbol):
 		    		counter += 1
 		    except AttributeError:
 		    	pass
-
+	return articles
+"""
 	length = min(len(articles), len(titles))
 	print length
 	for i in xrange(length):
 		articles[i].insert(1,titles[i])
+"""
 
-	return articles
 
 
 	#print soup.find("div", {"id": "articleText"}).text
