@@ -5,14 +5,15 @@ import re
 from pprint import pprint
 import datetime as dt
 
-# Simple test of the Data On Demand HTTP API
-# Comment out the plt and matplotlib lines if you dont have it installed...
+#Alchemy Keys
+CONSUMER_KEY = "blzC40MytkH9HguJYBUcttxxg"
+CONSUMER_SECRET = "Mw37mXO7sXUNazbUkUlfsfjSzQCMIXNZXD3wuSmJeQj1tvnm2e"
+ACCESS_TOKEN_KEY = "2658435840-MjNaSPPQso4aMFK1C1SgB5S8ISlRSAlQsPLFB74"
+ACCESS_TOKEN_SECRET = "iTF4QJcKlu4ZCOJbtbJTTGvO1xHjRSB5JZJCrdTjyJQrB"
 
 
-#XML to Dictionary code source: http://code.activestate.com/recipes/410469-xml-as-dictionary/
 
-# Returns a list of dictionries
-# Use if you XML contains multiple elements at the same level
+
 class Xml2List(list):
     def __init__(self, aList):
         for element in aList:

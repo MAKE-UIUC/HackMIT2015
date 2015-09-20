@@ -13,8 +13,8 @@ from bs4 import BeautifulSoup
 [] packages it into a dictionary
 """
 def extractArticleText(symbol):
+	data = []
 	articles = []
-	headlines = []
 	html = urllib.urlopen('http://www.nasdaq.com/symbol/' + symbol + '/news-headlines')
 	soup = BeautifulSoup(html)
 	soup = soup.find("div", { "class" : "headlines" })
@@ -25,17 +25,18 @@ def extractArticleText(symbol):
 	for a in soup.find_all('a', href=True):
 	    html0 = urllib.urlopen(a['href'])
 	    soup0 = BeautifulSoup(html0)
+	    for page in soup0.findAll('p'):
+	    	print page.text
 	    try:
 	    	term = a.text
 	    	if(term == ("Motley Fool") or term == ("RTT News") or term == ("Zacks.com")):
 	    		pass
 	    	else:
 	    		articles.append(a.text)
-	    	for page in soup0.findAll('p'):
-	    		pass#print soup0.find("div", {"id": "articleText"}).text
+
 	    except AttributeError:
 	    	pass
-	return articles
+	#return articles
 
 
 	#print soup.find("div", {"id": "articleText"}).text
