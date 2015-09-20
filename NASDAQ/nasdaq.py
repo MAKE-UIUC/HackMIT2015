@@ -75,7 +75,7 @@ class Xml2Dict(dict):
 url = 'http://ws.nasdaqdod.com/v1/NASDAQAnalytics.asmx/GetEndOfDayData'
 # Change symbols and date range (not more that 30 days at a time)
 values = {'_Token' : '92E9B809A616440490396CB7601E0A34',
-          'Symbols' : 'GOOG,AAPL,QQQ',
+          'Symbols' : 'GOOG',#'GOOG,AAPL,QQQ',
           'StartDate' : '9/14/2015',
           'EndDate' : '9/18/2015',
           'MarketCenters' : '' }
