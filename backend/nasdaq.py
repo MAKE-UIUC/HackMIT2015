@@ -73,66 +73,67 @@ class Xml2Dict(dict):
 
 ## API Test ##
 
-url = 'http://ws.nasdaqdod.com/v1/NASDAQAnalytics.asmx/GetEndOfDayData'
-# Change symbols and date range (not more that 30 days at a time)
-values = {'_Token' : '92E9B809A616440490396CB7601E0A34',
-          'Symbols' : 'GOOG',#'GOOG,AAPL,QQQ',
-          'StartDate' : '9/14/2015',
-          'EndDate' : '9/18/2015',
-          'MarketCenters' : '' }
+def nasdaq(ticker):
+    url = 'http://ws.nasdaqdod.com/v1/NASDAQAnalytics.asmx/GetEndOfDayData'
+    # Change symbols and date range (not more that 30 days at a time)
+    values = {'_Token' : '92E9B809A616440490396CB7601E0A34',
+              'Symbols' : ticker,
+              'StartDate' : '9/14/2015',
+              'EndDate' : '9/18/2015',
+              'MarketCenters' : '' }
 
-# Build HTTP request
-request_parameters = urllib.urlencode(values)
-req = urllib2.Request(url, request_parameters)
+    # Build HTTP request
+    request_parameters = urllib.urlencode(values)
+    req = urllib2.Request(url, request_parameters)
 
-# Submit request
-try:
-    response = urllib2.urlopen(req)
-    
-except urllib2.HTTPError as e:
-    print e.code
-    print e.read()
+    # Submit request
+    try:
+        response = urllib2.urlopen(req)
+        
+    except urllib2.HTTPError as e:
+        print e.code
+        print e.read()
 
-# Read response
-the_page = response.read()
+    # Read response
+    the_page = response.read()
 
-# Remove annoying namespace prefix
-the_page = re.sub(' xmlns="[^"]+"', '', the_page, count=1)
+    # Remove annoying namespace prefix
+    the_page = re.sub(' xmlns="[^"]+"', '', the_page, count=1)
 
-# Parse page XML from string
-root = ElementTree.XML(the_page)
+    # Parse page XML from string
+    root = ElementTree.XML(the_page)
 
-# Cast ElementTree to list of dictionaries
-data = Xml2List(root)
+    # Cast ElementTree to list of dictionaries
+    data = Xml2List(root)
 
-# Package the data into a useful format
-closing_prices = []
+    # Package the data into a useful format
+    closing_prices = []
 
-if data[0]["Outcome"] == 'RequestError' and "Prices" not in data[0]:
-    print "Web Request Error :(  Make sure that you arent pulling more that one month of data. "
-    print the_page
-
-
-for i in data:
-    closing_prices.append({'Symbol':i['Symbol'],'Dates':[],'Prices':[],'Volume':[], 'PercentChange':[]})
-    
-    for price in i['Prices']['EndOfDayPrice']:
-
-        try:
-            closing_prices[-1]['Dates'].append(price['Date'])
-            closing_prices[-1]['Volume'].append(price['Volume'])
-            closing_prices[-1]['Prices'].append(float(price['Close']))
-            
-            ## Normalize prices to show percent change from start of time range
-            closing_prices[-1]['PercentChange'].append(100*(closing_prices[-1]['Prices'][-1]-
-                closing_prices[-1]['Prices'][0])/
-                closing_prices[-1]['Prices'][0])
-
-        except(Exception) as e:
-            print "Skipping non-trading date."
-
-# Examine new dictionary
-pprint(closing_prices)
+    if data[0]["Outcome"] == 'RequestError' and "Prices" not in data[0]:
+        print "Web Request Error :(  Make sure that you arent pulling more that one month of data. "
+        print the_page
 
 
+    for i in data:
+        closing_prices.append({'Symbol':i['Symbol'],'Dates':[],'Prices':[],'Volume':[], 'PercentChange':[]})
+        
+        for price in i['Prices']['EndOfDayPrice']:
+
+            try:
+                closing_prices[-1]['Dates'].append(price['Date'])
+                closing_prices[-1]['Volume'].append(price['Volume'])
+                closing_prices[-1]['Prices'].append(float(price['Close']))
+                
+                ## Normalize prices to show percent change from start of time range
+                closing_prices[-1]['PercentChange'].append(100*(closing_prices[-1]['Prices'][-1]-
+                    closing_prices[-1]['Prices'][0])/
+                    closing_prices[-1]['Prices'][0])
+
+            except(Exception) as e:
+                print "Skipping non-trading date."
+
+    # Examine new dictionary
+    pprint(closing_prices)
+
+    return closing_prices
 
