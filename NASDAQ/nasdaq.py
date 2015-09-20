@@ -1,12 +1,8 @@
-# mit-api-test-http.py
-
 import urllib
 import urllib2
 import xml.etree.cElementTree as ElementTree
 import re
 from pprint import pprint
-import matplotlib.dates as mdates
-import matplotlib.pyplot as plt
 import datetime as dt
 
 # Simple test of the Data On Demand HTTP API
@@ -137,23 +133,5 @@ for i in data:
 # Examine new dictionary
 pprint(closing_prices)
 
-#Plot results
 
-## Need to convert the a numeric date format for plotting
-title_strings = []
-for i in closing_prices:
-    plt.plot([dt.datetime.strptime(d,'%m/%d/%Y').date() for d in i['Dates']], i["PercentChange"], label = i["Symbol"])
-    title_strings.append(i["Symbol"])
 
-## Set plot formatting / configurations
-"""
-plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%m/%d/%Y'))
-plt.gca().xaxis.set_major_locator(mdates.DayLocator())
-plt.gcf().autofmt_xdate()
-plt.title(format("Comparison of %s" % (str(title_strings).strip('[').strip(']'))))
-plt.xlabel("Trading Date")
-plt.ylabel("Percent Change")
-plt.legend()
-## Display
-plt.show()
-"""
